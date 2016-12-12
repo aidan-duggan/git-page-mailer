@@ -1,16 +1,13 @@
-package pog.message;
+package com.wg.gpm.message;
 
-import com.google.common.collect.Lists;
-import pog.parser.DefaultParserContext;
-import pog.parser.LineParser;
-import pog.parser.ParserContext;
+import com.wg.gpm.parser.DefaultParserContext;
+import com.wg.gpm.parser.LineParser;
+import com.wg.gpm.parser.ParserContext;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Created by aidan on 31/10/16.

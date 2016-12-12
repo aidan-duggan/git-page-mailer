@@ -1,4 +1,4 @@
-package pog.parser;
+package com.wg.gpm.parser;
 
 import java.util.*;
 

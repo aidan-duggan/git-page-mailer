@@ -1,6 +1,6 @@
-package pog.gmail;
+package com.wg.gpm.gmail;
 
-import pog.message.RawMessage;
+import com.wg.gpm.message.RawMessage;
 
 import java.util.List;
 

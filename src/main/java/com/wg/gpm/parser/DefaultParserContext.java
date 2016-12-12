@@ -1,7 +1,7 @@
-package pog.parser;
+package com.wg.gpm.parser;
 
 import com.google.api.client.repackaged.com.google.common.base.Preconditions;
-import pog.message.PostDetails;
+import com.wg.gpm.message.PostDetails;
 
 import java.util.HashMap;
 import java.util.Map;

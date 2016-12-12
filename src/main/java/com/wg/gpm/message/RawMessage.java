@@ -1,4 +1,4 @@
-package pog.message;
+package com.wg.gpm.message;
 
 import java.util.List;
 

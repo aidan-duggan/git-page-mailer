@@ -1,4 +1,4 @@
-package pog.git;
+package com.wg.gpm.git;
 
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.io.FileUtils;
@@ -7,7 +7,7 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.TextProgressMonitor;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
-import pog.message.PostDetails;
+import com.wg.gpm.message.PostDetails;
 
 import java.io.File;
 import java.io.IOException;

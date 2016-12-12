@@ -1,8 +1,7 @@
-package pog.parser;
+package com.wg.gpm.parser;
 
 import java.util.Collection;
 import java.util.Deque;
-import java.util.Stack;
 
 /**
  * Created by aidan on 04/11/16.

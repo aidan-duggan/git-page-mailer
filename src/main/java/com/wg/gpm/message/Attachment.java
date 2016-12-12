@@ -1,4 +1,4 @@
-package pog.message;
+package com.wg.gpm.message;
 
 /**
  * Created by aidan on 02/11/16.

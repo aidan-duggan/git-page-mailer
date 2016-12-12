@@ -1,4 +1,4 @@
-package pog.gmail;
+package com.wg.gpm.gmail;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
@@ -14,6 +14,7 @@ import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.GmailScopes;
 import org.apache.commons.configuration2.Configuration;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -70,7 +71,7 @@ public class GmailBuilder {
     private Credential authorize() throws IOException {
         // Load client secrets.
         InputStream in =
-                GmailBuilder.class.getResourceAsStream(gmailToken);
+                new FileInputStream(gmailToken);
         GoogleClientSecrets clientSecrets =
                 GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 

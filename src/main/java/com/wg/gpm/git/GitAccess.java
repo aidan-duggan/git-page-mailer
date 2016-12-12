@@ -1,7 +1,7 @@
-package pog.git;
+package com.wg.gpm.git;
 
 import org.eclipse.jgit.api.errors.GitAPIException;
-import pog.message.PostDetails;
+import com.wg.gpm.message.PostDetails;
 
 /**
  * Created by aidan on 31/10/16.

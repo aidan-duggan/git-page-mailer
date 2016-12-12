@@ -1,4 +1,4 @@
-package pog.parser;
+package com.wg.gpm.parser;
 
 /**
  * Created by aidan on 04/11/16.

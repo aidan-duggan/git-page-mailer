@@ -1,14 +1,12 @@
-package pog.parser;
+package com.wg.gpm.parser;
 
 import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Test;
-import pog.message.PostDetails;
+import com.wg.gpm.message.PostDetails;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.Optional;
-import java.util.Stack;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
