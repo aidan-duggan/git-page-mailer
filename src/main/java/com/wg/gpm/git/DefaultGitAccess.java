@@ -1,5 +1,6 @@
 package com.wg.gpm.git;
 
+import com.wg.gpm.message.PostDetails;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.BooleanUtils;
@@ -7,7 +8,6 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.TextProgressMonitor;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
-import com.wg.gpm.message.PostDetails;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,24 +17,35 @@ import java.io.IOException;
  */
 public class DefaultGitAccess implements GitAccess{
 
-    private static final String REMOTE_URL = "https://github.com/whilegaming/whilegaming.github.io.git";
-
     private final File gitDirectory;
     private final String gitToken;
     private final boolean pushToRemote;
+    private final String repoUrl;
 
-    private DefaultGitAccess(File gitdirectory, String gitToken, boolean pushToRemote){
+    private DefaultGitAccess(File gitdirectory, String gitToken, String repoUrl){
         super();
         this.gitDirectory = gitdirectory;
         this.gitToken = gitToken;
-        this.pushToRemote = pushToRemote;
+        this.pushToRemote = true;
+        this.repoUrl = repoUrl;
+    }
+
+    private DefaultGitAccess(File gitdirectory, String gitToken){
+        super();
+        this.gitDirectory = gitdirectory;
+        this.gitToken = gitToken;
+        this.pushToRemote = false;
+        this.repoUrl = null;
     }
 
     public static DefaultGitAccess buildGitAccess(Configuration config){
         String token = (String)config.getProperty("gittoken");
         String gitDirectory = (String)config.getProperty("gitdir");
         boolean pushToRemote = BooleanUtils.toBoolean((String)config.getProperty("pushToRemote"));
-        return new DefaultGitAccess(new File(gitDirectory), token, pushToRemote);
+        if(pushToRemote){
+            new DefaultGitAccess(new File(gitDirectory), token, (String)config.getProperty("repoUrl"));
+        }
+        return new DefaultGitAccess(new File(gitDirectory), token);
     }
 
     private void syncRepo() throws GitAPIException {
@@ -47,9 +58,9 @@ public class DefaultGitAccess implements GitAccess{
             gitDirectory.delete();
         }
         // then clone
-        System.out.println("Cloning from " + REMOTE_URL + " to " + gitDirectory);
+        System.out.println("Cloning from " + repoUrl + " to " + gitDirectory);
         try (Git result = Git.cloneRepository()
-                .setURI(REMOTE_URL)
+                .setURI(repoUrl)
                 .setDirectory(gitDirectory)
                 .setProgressMonitor(new TextProgressMonitor())
                 .call()) {
@@ -101,7 +112,15 @@ public class DefaultGitAccess implements GitAccess{
             System.out.println("Pushing to repository at " + git.getRepository().getDirectory());
 
         }
+    }
 
+    private void pullFromRemoteRepo() throws GitAPIException {
+        try (Git git = Git.init().setDirectory(gitDirectory).call()) {
+
+           git.pull()
+                .setProgressMonitor(new TextProgressMonitor())
+                   .call();
+        }
     }
 
     @Override
@@ -112,7 +131,8 @@ public class DefaultGitAccess implements GitAccess{
     @Override
     public void syncIfMissing() throws GitAPIException {
         if(!this.gitDirectory.exists()){
-            this.syncRepo();
+            syncRepo();
         }
+        pullFromRemoteRepo();
     }
 }

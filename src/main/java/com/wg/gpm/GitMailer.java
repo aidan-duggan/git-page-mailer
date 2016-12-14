@@ -20,6 +20,8 @@ import java.util.Optional;
  */
 public class GitMailer {
 
+    //sync repo?
+
     private void scanAndCommit(GitAccess gitAccess, MailService service, LineParser lineParser){
         MessageFileWriter writer = new MessageFileWriter(gitAccess.getGitDirectory(), lineParser);
         service.pollForMessages().stream()
@@ -35,7 +37,7 @@ public class GitMailer {
         gitAccess.syncIfMissing();
         GmailBuilder builder = new GmailBuilder(config);
         String requiredSender = config.getString("requiredsender");
-        LineParser parser = buildOptionalLineParser(config.getString("repourl"));
+        LineParser parser = buildOptionalLineParser(config.getString("webRootUrl"));
         new GitMailer().scanAndCommit(gitAccess, builder.getGmailService(requiredSender), parser);
     }
 
