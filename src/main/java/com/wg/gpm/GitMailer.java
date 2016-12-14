@@ -20,8 +20,6 @@ import java.util.Optional;
  */
 public class GitMailer {
 
-    //sync repo?
-
     private void scanAndCommit(GitAccess gitAccess, MailService service, LineParser lineParser){
         MessageFileWriter writer = new MessageFileWriter(gitAccess.getGitDirectory(), lineParser);
         service.pollForMessages().stream()
