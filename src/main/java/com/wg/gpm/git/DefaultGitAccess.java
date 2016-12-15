@@ -1,7 +1,8 @@
 package com.wg.gpm.git;
 
 import com.wg.gpm.message.PostDetails;
-import org.apache.commons.configuration2.Configuration;
+import com.wg.gpm.properties.ConfigurationAccess;
+import com.wg.gpm.properties.ConfigurationProperty;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.eclipse.jgit.api.Git;
@@ -38,12 +39,12 @@ public class DefaultGitAccess implements GitAccess{
         this.repoUrl = null;
     }
 
-    public static DefaultGitAccess buildGitAccess(Configuration config){
-        String token = (String)config.getProperty("gittoken");
-        String gitDirectory = (String)config.getProperty("gitdir");
-        boolean pushToRemote = BooleanUtils.toBoolean((String)config.getProperty("pushToRemote"));
+    public static DefaultGitAccess buildGitAccess(ConfigurationAccess config){
+        String token = config.getPropertyValue(ConfigurationProperty.GIT_TOKEN);
+        String gitDirectory = config.getPropertyValue(ConfigurationProperty.GIT_DIRECTORY);
+        boolean pushToRemote = BooleanUtils.toBoolean(config.getPropertyValue(ConfigurationProperty.PUSH_TO_REMOTE));
         if(pushToRemote){
-            new DefaultGitAccess(new File(gitDirectory), token, (String)config.getProperty("repoUrl"));
+            new DefaultGitAccess(new File(gitDirectory), token, config.getPropertyValue(ConfigurationProperty.REPOSITORY_URL));
         }
         return new DefaultGitAccess(new File(gitDirectory), token);
     }

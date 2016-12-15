@@ -12,6 +12,8 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.GmailScopes;
+import com.wg.gpm.properties.ConfigurationAccess;
+import com.wg.gpm.properties.ConfigurationProperty;
 import org.apache.commons.configuration2.Configuration;
 
 import java.io.FileInputStream;
@@ -64,8 +66,8 @@ public class GmailBuilder {
 
     private final String gmailToken;
 
-    public GmailBuilder(Configuration config){
-        this.gmailToken = config.getString("gmailtoken");
+    public GmailBuilder(ConfigurationAccess config){
+        this.gmailToken = config.getPropertyValue(ConfigurationProperty.GMAIL_TOKEN_LOCATION);
     }
 
     private Credential authorize() throws IOException {

@@ -3,7 +3,7 @@ package com.wg.gpm.properties;
 /**
  * Created by aidan on 15/12/16.
  */
-public enum ConfigurationProperties implements Properties{
+public enum ConfigurationProperty implements Property {
     REQUIRED_SENDER("requiredsender"),
     REPOSITORY_URL("repoUrl"),
     WEBSITE_ROOT_URL("webRootUrl"),
@@ -14,7 +14,7 @@ public enum ConfigurationProperties implements Properties{
 
     private final String key;
 
-    ConfigurationProperties(String key) {
+    ConfigurationProperty(String key) {
         this.key = key;
     }
 

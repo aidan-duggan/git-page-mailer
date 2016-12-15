@@ -1,6 +1,9 @@
 package com.wg.gpm;
 
 import com.google.common.collect.Lists;
+import com.wg.gpm.properties.ConfigurationAccess;
+import com.wg.gpm.properties.ConfigurationProperty;
+import com.wg.gpm.properties.DefaultConfigurationAccess;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.ex.ConfigurationException;
@@ -30,12 +33,12 @@ public class GitMailer {
     }
 
     public static void main(String[] args) throws ConfigurationException, IOException, GitAPIException {
-        Configuration config = buildConfiguration(args);
+        ConfigurationAccess config = new DefaultConfigurationAccess(buildConfiguration(args));
         GitAccess gitAccess = DefaultGitAccess.buildGitAccess(config);
         gitAccess.syncIfMissing();
         GmailBuilder builder = new GmailBuilder(config);
-        String requiredSender = config.getString("requiredsender");
-        LineParser parser = buildOptionalLineParser(config.getString("webRootUrl"));
+        String requiredSender = config.getPropertyValue(ConfigurationProperty.REQUIRED_SENDER);
+        LineParser parser = buildOptionalLineParser(config.getPropertyValue(ConfigurationProperty.WEBSITE_ROOT_URL));
         new GitMailer().scanAndCommit(gitAccess, builder.getGmailService(requiredSender), parser);
     }
 
