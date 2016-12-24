@@ -1,5 +1,7 @@
 package com.wg.gpm.message;
 
+import static com.wg.gpm.properties.Property.*;
+
 import com.wg.gpm.parser.DefaultParserContext;
 import com.wg.gpm.parser.LineParser;
 import com.wg.gpm.parser.ParserContext;
@@ -13,10 +15,6 @@ import java.util.*;
  * Created by aidan on 31/10/16.
  */
 public class MessageFileWriter {
-
-    private static final String POST_DIR = "_posts";
-    private static final String IMG_DIR = "img";
-    private static final String MD = ".md";
 
     private final String gitDirectory;
     private final LineParser lineParser;

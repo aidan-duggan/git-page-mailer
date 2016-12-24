@@ -5,6 +5,10 @@ package com.wg.gpm.properties;
  */
 public interface Property {
 
+    public static final String POST_DIR = "_posts";
+    public static final String IMG_DIR = "img";
+    public static final String MD = ".md";
+
     public String getPropertyKey();
 
 }

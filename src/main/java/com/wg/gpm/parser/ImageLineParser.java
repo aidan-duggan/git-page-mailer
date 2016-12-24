@@ -8,7 +8,6 @@ import java.util.Optional;
  */
 public class ImageLineParser implements OptionalLineParser{
 
-    private static final String IMG = "[img]";
     private static final char TEXT_SEPERATOR = ':';
     private static final String CENTER_P_TAG = "<p align=\"center\">";
     private static final String END_P_TAG = "</p>";
@@ -26,56 +25,72 @@ public class ImageLineParser implements OptionalLineParser{
     @Override
     public boolean parseLine(ParserContext context, Deque<String> lines, Deque<String> results) {
         String line = lines.peekLast();
-        if(line.contains(IMG)){
-            int imageNameStart = line.indexOf(IMG);
+        Optional<ImageType> imageType = buildImageType(line);
+        if(imageType.isPresent()){
+            ImageType type = imageType.get();
+            String tag = type.getTag();
+            int imageNameStart = line.indexOf(tag);
             int imageTextStart = line.indexOf(TEXT_SEPERATOR);
+            String imageName = getName(line, imageNameStart + tag.length(), imageTextStart);
             String imageText = line.substring(imageTextStart + 1);
-            String imageName = getString(line, imageNameStart, imageTextStart);
-            String imageLink = context.buildImageLink(repoUrl, imageName);
+            String imageLink = type.buildImageLink(context, this.repoUrl, imageName);
 
-            StringBuilder builder = new StringBuilder();
-            builder.append(line.substring(0, imageNameStart));
-            builder.append(CENTER_P_TAG);
-            builder.append(System.lineSeparator());
-
-            builder.append("<a href=\"");
-            builder.append(imageLink);
-            buildEndElementWithQuote(builder);
-
-            builder.append("<img src=");
-            appendQuote(builder);
-            builder.append(imageLink);
-            appendQuote(builder);
-            builder.append(" alt=");
-            appendQuote(builder);
-            builder.append(imageText);
-            appendQuote(builder);
-            if(this.width.isPresent()) {
-                builder.append(" width=\"");
-                builder.append(this.width.get());
-                builder.append("\"");
-            }
-            if(this.height.isPresent()){
-                builder.append(" height=\"");
-                builder.append(this.height.get());
-                builder.append("\"");
-            }
-            builder.append(">");
-
-            builder.append("</a>");
-            builder.append(System.lineSeparator());
-            builder.append(END_P_TAG);
-            builder.append("\n");
-            builder.append(CENTER_P_TAG);
-            builder.append("<i>");
-            builder.append(imageText);
-            builder.append("</i>");
-            builder.append(END_P_TAG);
+            String newLine = buildImageHtml(imageText, imageLink);
             lines.removeLast();
-            results.addLast(builder.toString());
+            results.addLast(newLine);
             return true;
         }
         return false;
+    }
+
+    private Optional<ImageType> buildImageType(String line) {
+        for(ImageType type : ImageType.values()) {
+            if (line.startsWith(type.getTag())) {
+                return Optional.of(type);
+            }
+        }
+        return Optional.empty();
+    }
+
+    private String buildImageHtml(String imageText, String imageLink) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(CENTER_P_TAG);
+        builder.append(System.lineSeparator());
+
+        builder.append("<a href=\"");
+        builder.append(imageLink);
+        buildEndElementWithQuote(builder);
+
+        builder.append("<img src=");
+        appendQuote(builder);
+        builder.append(imageLink);
+        appendQuote(builder);
+        builder.append(" alt=");
+        appendQuote(builder);
+        builder.append(imageText);
+        appendQuote(builder);
+        if(this.width.isPresent()) {
+            builder.append(" width=\"");
+            builder.append(this.width.get());
+            builder.append("\"");
+        }
+        if(this.height.isPresent()){
+            builder.append(" height=\"");
+            builder.append(this.height.get());
+            builder.append("\"");
+        }
+        builder.append(">");
+
+        builder.append("</a>");
+        builder.append(System.lineSeparator());
+        builder.append(END_P_TAG);
+        builder.append("\n");
+        builder.append(CENTER_P_TAG);
+        builder.append("<i>");
+        builder.append(imageText);
+        builder.append("</i>");
+        builder.append(END_P_TAG);
+        return builder.toString();
     }
 
     private void buildEndElementWithQuote(StringBuilder builder) {
@@ -86,7 +101,7 @@ public class ImageLineParser implements OptionalLineParser{
         builder.append("\"");
     }
 
-    private String getString(String line, int imageNameStart, int imageTextStart) {
-        return line.substring(imageNameStart + IMG.length(), imageTextStart).trim();
+    private String getName(String line, int imageNameEnd, int imageTextStart) {
+        return line.substring(imageNameEnd, imageTextStart).trim();
     }
 }

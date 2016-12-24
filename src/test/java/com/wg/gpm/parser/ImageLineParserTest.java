@@ -52,6 +52,17 @@ public class ImageLineParserTest {
                 "<p align=\"center\"><i>alt image text</i></p>", stack.pop());
     }
 
+    @Test
+    public void testWithExistingImgTag(){
+        Deque stack = new ArrayDeque();
+        boolean result = parser.parseLine(context, buildStack("[ex-img]img2.png:alt image text"), stack);
+        assertTrue(result);
+        assertEquals("<p align=\"center\">\n" +
+                "<a href=\"http://url.github.io/img/img2.png\"><img src=\"http://url.github.io/img/img2.png\" alt=\"alt image text\" width=\"500\"></a>" +
+                "\n</p>" + "\n"+
+                "<p align=\"center\"><i>alt image text</i></p>", stack.pop());
+    }
+
     private Deque buildStack(String line) {
         Deque stack = new ArrayDeque();
         stack.push(line);
